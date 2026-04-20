@@ -497,8 +497,8 @@ int child_fn(void *arg)
         return 1;
     }
 
-    execv(args[0], args);
-    perror("execv");
+    execvp(args[0], args);
+    perror("execvp");
     return 1;
 }
 
@@ -769,8 +769,7 @@ static void handle_client(supervisor_ctx_t *ctx, int client_fd)
         int running = 0;
         pthread_mutex_lock(&ctx->metadata_lock);
         container_record_t *ex = find_container(ctx, req.container_id);
-        if (ex && (ex->state == CONTAINER_RUNNING ||
-                   ex->state == CONTAINER_STARTING))
+        if (ex)
             running = 1;
         pthread_mutex_unlock(&ctx->metadata_lock);
 
@@ -799,8 +798,7 @@ static void handle_client(supervisor_ctx_t *ctx, int client_fd)
         int running = 0;
         pthread_mutex_lock(&ctx->metadata_lock);
         container_record_t *ex = find_container(ctx, req.container_id);
-        if (ex && (ex->state == CONTAINER_RUNNING ||
-                   ex->state == CONTAINER_STARTING))
+        if (ex)
             running = 1;
         pthread_mutex_unlock(&ctx->metadata_lock);
 
